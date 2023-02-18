@@ -2,6 +2,7 @@ FROM golang:1.20.1-alpine3.17 AS builder
 
 RUN apk update
 RUN apk add git
+RUN apk add patch
 RUN git clone https://github.com/FiloSottile/mkcert --depth=1 mkcert
 WORKDIR ./mkcert
 ADD iOS-398-days-limit.patch ./patch
