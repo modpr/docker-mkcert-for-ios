@@ -4,6 +4,8 @@ RUN apk update
 RUN apk add git
 RUN git clone https://github.com/FiloSottile/mkcert --depth=1 mkcert
 WORKDIR ./mkcert
+ADD iOS-398-days-limit.patch ./patch
+RUN patch -i patch -p1
 RUN CGO_ENABLED=0 go build -a -installsuffix cgo -o app .
 
 FROM alpine:latest
