@@ -1,0 +1,33 @@
+version: 2.1
+
+jobs:
+  build:
+    environment:
+      DOCKER_IMAGE_TAG: "modpro/mkcert-command:latest" 
+      DOCKER_BUILD_TARGET: "linux/amd64,linux/arm/v7,linux/arm64"
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - setup_remote_docker:
+          version: 20.10.18
+      - checkout
+      - run:
+          name: login to DockerHub
+          command: echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
+      - run:
+          name: build and publish image to DockerHub.
+          command: |
+            docker context create buildx-build
+            docker buildx create --use buildx-build \
+              --name multi --driver docker-container \
+              --platform $DOCKER_BUILD_TARGET
+            docker buildx build --push \
+              --tag $DOCKER_IMAGE_TAG \
+              --platform $DOCKER_BUILD_TARGET \
+              .
+workflows:
+  build-deploy:
+    jobs:
+      - build:
+          context:
+            - DockerHub
