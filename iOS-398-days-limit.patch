@@ -1,7 +1,7 @@
 diff --git a/cert.go b/cert.go
 index 4ce36cc..dd8dd85 100644
 --- a/cert.go
-+++ b/cert.g
++++ b/cert.go
 @@ -59,7 +59,7 @@ func (m *mkcert) makeCert(hosts []string) {
         // Certificates last for 2 years and 3 months, which is always less than
         // 825 days, the limit that macOS/iOS apply to all certificates,
